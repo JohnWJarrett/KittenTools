@@ -76,4 +76,19 @@ Public Class KUtil
 
         Return result
     End Function
+
+    ''' <summary>
+    ''' Adds leading zeros to a number to make it a specified number of digits long.
+    ''' </summary>
+    ''' <param name="input">The value</param>
+    ''' <param name="digits">How many leading 0's do you want?</param>
+    ''' <returns></returns>
+    Public Shared Function LeadingZeros(input As Integer, digits As Integer) As String
+        Dim result As String = input.ToString()
+        While result.Length < digits
+            result = "0" & result
+        End While
+        Return result
+    End Function
+
 End Class
