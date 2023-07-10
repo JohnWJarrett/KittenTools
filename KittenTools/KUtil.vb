@@ -122,4 +122,71 @@ Public Class KUtil
 
         Return result
     End Function
+
+    Public Shared Function GetRangeFromArray(Arr As Array, rngMin As Integer, rngMax As Integer) As Array
+        Dim result As Array = Array.CreateInstance(Arr.GetType().GetElementType(), rngMax - rngMin + 1)
+        Dim i As Integer = 0
+        Dim j As Integer = 0
+
+        For Each item As Object In Arr
+            If i >= rngMin And i <= rngMax Then
+                result.SetValue(item, j)
+                j += 1
+            End If
+            i += 1
+        Next
+
+        Return result
+    End Function
+
+    Public Enum StartPoint
+        IStart
+        IMiddle
+        IEnd
+    End Enum
+
+
+    ''' <summary>
+    ''' Get's a percent of an array and returns it as a new array.
+    ''' </summary>
+    ''' <param name="arr">The array you want to get a percentage of</param>
+    ''' <param name="index">What index should we be working around, for example, if you want to get the first 10th percentile of an array, you would have the index be 0 and use the "IStart" for Start point.</param>
+    ''' <param name="percent">What is the percentage you want, it must be a number between 1 and 99, as 0 would be none of the array and 100 would be the whole array.</param>
+    ''' <param name="startPoint">Where do you want to start, IStart will mean the index you gave will be the first element of the new list, IEnd it would be the last, and IMiddle it will be somewhere in the middle.</param>
+    ''' <returns></returns>
+    Public Shared Function GetPercentageFromArray(arr As Array, index As Integer, percent As Integer, startPoint As StartPoint) As Array
+        ' Calculate how many elements we need
+        Dim sindx As Integer = 0
+        Dim eindx As Integer = arr.Length
+        Dim indadd As Integer
+
+        If percent < 1 Or percent > 99 Then
+            Throw New Exception($"Percentage must be between 1 and 99, you have chosen {percent}.")
+        End If
+
+
+        indadd = arr.Length * (percent / 100)
+
+        Select Case startPoint
+            Case StartPoint.IStart
+                sindx = index
+                eindx = index + indadd
+            Case StartPoint.IMiddle
+                sindx = index - Round(indadd / 2, RoundOps.ToBaseNumber)
+                eindx = index + (indadd - Round(indadd / 2, RoundOps.ToBaseNumber))
+            Case StartPoint.IEnd
+                sindx = index - indadd
+                eindx = index
+        End Select
+
+        If sindx < 0 Then
+            sindx = 0
+        End If
+
+        If eindx > arr.Length Then
+            eindx = arr.Length
+        End If
+
+        Return GetRangeFromArray(arr, sindx, eindx)
+    End Function
 End Class
