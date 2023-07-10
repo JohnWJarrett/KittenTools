@@ -91,4 +91,35 @@ Public Class KUtil
         Return result
     End Function
 
+    ''' <summary>
+    ''' Reads a text file into a dictionary, seperated by the delimiter. Good for reading in config files.
+    ''' </summary>
+    ''' <param name="path">Where is the file</param>
+    ''' <param name="Delim">What do you want to use between the property name and value?</param>
+    ''' <param name="Cmnt">What is considered a comment, so we can ignore them.</param>
+    ''' <returns></returns>
+    Public Shared Function ReadTextToDictionary(path As String, Delim As Char, Cmnt As Char) As Dictionary(Of String, String)
+        Dim result As New Dictionary(Of String, String)
+        Dim lines As String()
+
+        If IO.File.Exists(path) Then
+            lines = IO.File.ReadAllLines(path)
+        Else
+            Return result
+        End If
+
+        For Each line As String In lines
+            line = line.TrimStart()
+            If Not line.StartsWith(Cmnt) Then
+                Dim delimIndex As Integer = line.IndexOf(Delim)
+                If delimIndex >= 0 Then
+                    Dim key As String = line.Substring(0, delimIndex).Trim()
+                    Dim value As String = line.Substring(delimIndex + 1).Trim()
+                    result.Add(key, value)
+                End If
+            End If
+        Next
+
+        Return result
+    End Function
 End Class
