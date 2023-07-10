@@ -90,4 +90,5 @@ Public Class KUtil
         End While
         Return result
     End Function
+
 End Class
