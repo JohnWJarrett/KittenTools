@@ -1,7 +1,7 @@
 ''' <summary>
 ''' A class for generating random numbers
 ''' <author>Kitten</author>
-''' <created>2022-07-09</created>
+''' <created>2023-07-09</created>
 ''' </summary>
 Public Class KMthRndm
     Private ReadOnly R As Random
@@ -27,7 +27,6 @@ Public Class KMthRndm
 
         Return Result
     End Function
-
 
     ''' <summary>
     ''' Get a random double between min and max (inclusive)

@@ -1,7 +1,7 @@
 ﻿''' <summary>
 ''' Shared utility functions.
 ''' <author>Kitten</author>
-''' <created>2022-07-09</created>
+''' <created>2023-07-09</created>
 ''' </summary>
 Public Class KUtil
 
@@ -54,20 +54,25 @@ Public Class KUtil
     ''' <param name="roundOp">The rounding operation to perform. <c>ToBaseNumber</c> rounds down, <c>ToNextNumber</c> rounds up, <c>Point5Down</c> rounds half down, and <c>Point5Up</c> rounds half up.</param>
     ''' <returns>The rounded number.</returns>
     Public Shared Function Round(input As Double, roundOp As RoundOps) As Integer
-        Dim result As Integer = Math.Truncate(input)
+        Dim result As Integer = Math.Truncate(input) ' This makes Result be the base number
+        Dim RoundUp As Boolean = False
 
         Select Case roundOp
             Case RoundOps.ToNextNumber
-                result += 1
+                RoundUp = True
             Case RoundOps.Point5Down
-                If Not (input - result) <= 0.5 Then
-                    result += 1
+                If (input - result) > 0.5 Then
+                    RoundUp = True
                 End If
             Case RoundOps.Point5Up
                 If (input - result) >= 0.5 Then
-                    result += 1
+                    RoundUp = True
                 End If
         End Select
+
+        If RoundUp Then
+            result += 1
+        End If
 
         Return result
     End Function

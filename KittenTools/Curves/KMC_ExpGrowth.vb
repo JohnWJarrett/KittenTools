@@ -1,7 +1,7 @@
 ﻿''' <summary>
 ''' A class representing an Exponential Growth curve.
 ''' <author>Kitten</author>
-''' <created>2022-07-09</created>
+''' <created>2023-07-09</created>
 ''' </summary>
 Public Class KMC_ExpGrowth
     Inherits KMthCurve
