@@ -59,7 +59,7 @@ Public Class KRndmGen
     ''' Which list to target
     ''' </summary>
     Public Enum ListOpsTarget
-        <Description("This is the list that is realoaded if using the 'Reset' command")>
+        <Description("This is the list that is reloaded if using the 'Reset' command")>
         DefaultList
         <Description("The working list that is used for the random selection")>
         EntryList

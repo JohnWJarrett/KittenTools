@@ -11,10 +11,10 @@ Public Class KMC_InvertPrbla
     ''' <summary>
     ''' Creates a new instance of the InvertedParabolaCurve class.
     ''' </summary>
-    ''' <param name="p">The power to which the curve's function is raised. p = 1 gives a linear curve, p = 2 gives an inverted parabola. Higher values of p give steeper sides and a flatter peak.</param>
+    ''' <param name="power">The power to which the curve's function is raised. p = 1 gives a linear curve, p = 2 gives an inverted parabola. Higher values of p give steeper sides and a flatter peak.</param>
     ''' <param name="resolution">The number of points to generate for the curve.</param>
-    Public Sub New(p As Double, resolution As Integer)
-        Me.p = p
+    Public Sub New(power As Double, resolution As Integer)
+        Me.p = power
         CurveResolution = resolution
         CalculateCurve()
     End Sub

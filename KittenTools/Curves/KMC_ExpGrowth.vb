@@ -6,18 +6,18 @@
 Public Class KMC_ExpGrowth
     Inherits KMthCurve
 
-    Private a As Double
-    Private b As Double
+    Private scale As Double
+    Private growthRate As Double
 
     ''' <summary>
     ''' Creates a new instance of the ExponentialGrowthCurve class.
     ''' </summary>
-    ''' <param name="a">The scale factor for the curve.</param>
-    ''' <param name="b">The rate of growth for the curve.</param>
+    ''' <param name="scale">The scale factor for the curve.</param>
+    ''' <param name="growthRate">The rate of growth for the curve.</param>
     ''' <param name="resolution">The number of points to generate for the curve.</param>
-    Public Sub New(a As Double, b As Double, resolution As Integer)
-        Me.a = a
-        Me.b = b
+    Public Sub New(scale As Double, growthRate As Double, resolution As Integer)
+        Me.scale = scale
+        Me.growthRate = growthRate
         CurveResolution = resolution
         CalculateCurve()
     End Sub
@@ -25,11 +25,11 @@ Public Class KMC_ExpGrowth
     ''' <summary>
     ''' Updates the scale factor and rate of growth parameters for the curve and recalculates the curve.
     ''' </summary>
-    ''' <param name="a">The scale factor for the curve.</param>
-    ''' <param name="b">The rate of growth for the curve.</param>
-    Public Sub Morph(a As Double, b As Double)
-        Me.a = a
-        Me.b = b
+    ''' <param name="scale">The scale factor for the curve.</param>
+    ''' <param name="growthRate">The rate of growth for the curve.</param>
+    Public Sub Morph(scale As Double, growthRate As Double)
+        Me.scale = scale
+        Me.growthRate = growthRate
         CalculateCurve()
     End Sub
 
@@ -37,7 +37,7 @@ Public Class KMC_ExpGrowth
         Curve = New Double(CurveResolution - 1) {}
         For i As Integer = 0 To CurveResolution - 1
             Dim x As Double = i / (CurveResolution - 1) ' scale x to range [0,1]
-            Curve(i) = a * Math.Exp(b * x)
+            Curve(i) = scale * Math.Exp(growthRate * x)
         Next
     End Sub
 End Class
