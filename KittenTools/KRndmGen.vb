@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 
 ''' <summary>
 ''' Makes a list and checks it twice, or rather makes a list from a file or an array of strings and gives methods to get entries from it, mostly at random.
@@ -20,85 +21,47 @@ Public Class KRndmGen
 
     Private CIndx As Integer = 0
 
-    Private ReadOnly EntryLock As Object = New Object()
+    Private ReadOnly EntryLock As New Object()
+
+    Private Const NoFile As String = "NA"
 
     ' ================== Enums ==================
 
     ''' <summary>
     ''' What kind of operation to use.
-    '''     <list type="table">  
-    '''         <term> Int</term>  
-    '''           <description> Uses a normal Integer Random number between 0 and max entries</description>  
-    '''        <item>
-    '''         <term> Gaussian</term>  
-    '''           <description> Uses a Gaussian distribution with a mean of X and a standard deviation of Y</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> BiasedStart</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the start of the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> BiasedMiddle</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the middle of the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> BiasedEnd</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the end of the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> NextEntry</term>  
-    '''           <description> Gets the next entry in the list, when it reaches the end, it starts again</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> TrimGaussian</term>  
-    '''           <description> Uses a Gaussian distribution with a mean of X and a standard deviation of Y, then removes the result from the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> TrimBiasedStart</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the start of the list, then removes the result from the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> TrimBiasedMiddle</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the middle of the list, then removes the result from the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> TrimBiasedEnd</term>  
-    '''           <description> Uses the Biased Random number generator with a bias towards the end of the list, then removes the result from the list</description>  
-    '''        </item>
-    '''        <item>
-    '''         <term> Indx</term>  
-    '''           <description> Gets the entry at the specified index</description>  
-    '''        </item>
-    '''     </list>
     ''' </summary>
     Public Enum RandomType
+        <Description("Uses a normal Integer Random number between 0 and max entries")>
         Int
+        <Description("Uses a Gaussian distribution with a mean of X and a standard deviation of Y")>
         Gaussian
+        <Description("Uses the Biased Random number generator with a bias towards the start of the list")>
         BiasedStart
+        <Description("Uses the Biased Random number generator with a bias towards the middle of the list")>
         BiasedMiddle
+        <Description("Uses the Biased Random number generator with a bias towards the end of the list")>
         BiasedEnd
+        <Description("Gets the next entry in the list, when it reaches the end, it starts again")>
         NextEntry
+        <Description("Uses a Gaussian distribution with a mean of X and a standard deviation of Y, then removes the result from the list")>
         TrimGaussian
+        <Description("Uses the Biased Random number generator with a bias towards the start of the list, then removes the result from the list")>
         TrimBiasedStart
+        <Description("Uses the Biased Random number generator with a bias towards the middle of the list, then removes the result from the list")>
         TrimBiasedMiddle
+        <Description("Uses the Biased Random number generator with a bias towards the end of the list, then removes the result from the list")>
         TrimBiasedEnd
+        <Description("Gets the entry at the specified index")>
         Indx
     End Enum
 
-
     ''' <summary>
     ''' Which list to target
-    '''     <list type="table">  
-    '''         <term> DefaultList</term>  
-    '''           <description> This is the list that is realoaded if using the "Reset" command</description>  
-    '''        <item>
-    '''         <term> EntryList</term>  
-    '''           <description> The working list that is used for the random selection</description>  
-    '''        </item>
-    '''     </list>
     ''' </summary>
     Public Enum ListOpsTarget
+        <Description("This is the list that is realoaded if using the 'Reset' command")>
         DefaultList
+        <Description("The working list that is used for the random selection")>
         EntryList
     End Enum
 
@@ -129,7 +92,7 @@ Public Class KRndmGen
         EntryList = New List(Of String)
         DefaultEntryList = New List(Of String)
 
-        FileName = "NA"
+        FileName = NoFile
         CommentChar = cmnt
 
         For Each l As String In StringArr
@@ -169,7 +132,7 @@ Public Class KRndmGen
     ''' Reloads the list from the file
     ''' </summary>
     Public Sub ReloadList()
-        If Not FileName = "NA" Then
+        If Not FileName = NoFile Then
             SetList()
             EntryList = DefaultEntryList
         Else
@@ -278,13 +241,13 @@ Public Class KRndmGen
     ' ================== Random Ops ==================
 
     ''' <summary>
-    ''' Get an entry from the lists
+    ''' Get an entry from the lists based on different methods.
     ''' </summary>
-    ''' <param name="rndmtyp">Which method should we use to get the entry</param>
-    ''' <param name="index">For use with the Indx method</param>
-    ''' <param name="GaussX">For use with the Gaussian methods</param>
-    ''' <param name="GaussY">For use with the Gaussian methods</param>
-    ''' <returns></returns>
+    ''' <param name="rndmtyp">Determines the method to get the entry.</param>
+    ''' <param name="index">ONLY Required if 'rndmtyp' is Indx. Represents the index in the list to get the entry from.</param>
+    ''' <param name="GaussX">ONLY Required if 'rndmtyp' is Gaussian. Represents the mean value of the Gaussian distribution.</param>
+    ''' <param name="GaussY">ONLY Required if 'rndmtyp' is Gaussian. Represents the standard deviation of the Gaussian distribution.</param>
+    ''' <returns>The selected entry from the list.</returns>
     Public Function GetRandomEntry(rndmtyp As RandomType, Optional index As Integer = -1, Optional GaussX As Double = 0.0, Optional GaussY As Double = 1.0) As String
         Dim Result As String
 
@@ -293,7 +256,7 @@ Public Class KRndmGen
         End If
 
         Select Case rndmtyp
-            Case RandomType.TrimGaussian, RandomType.TrimBiasedEnd, RandomType.TrimBiasedMiddle, RandomType.TrimBiasedStart
+            Case RandomType.TrimBiasedEnd, RandomType.TrimBiasedMiddle, RandomType.TrimBiasedStart
                 Result = GetRandomEntryThenTrim(rndmtyp, index, GaussX, GaussY)
             Case Else
                 Result = RandomEntry(rndmtyp, index, GaussX, GaussY)
