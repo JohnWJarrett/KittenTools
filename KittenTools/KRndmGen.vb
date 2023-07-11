@@ -2,6 +2,7 @@
 
 ''' <summary>
 ''' Makes a list and checks it twice, or rather makes a list from a file or an array of strings and gives methods to get entries from it, mostly at random.
+''' Please note that only editing the list(s) will be thread safe, getting entries from it will not be.
 ''' <author>Kitten</author>
 ''' <created>2023-07-11</created>
 ''' </summary>
@@ -25,17 +26,50 @@ Public Class KRndmGen
 
     ''' <summary>
     ''' What kind of operation to use.
-    '''     Int = Uses a normal Integer Random number between 0 and max entries
-    '''     Gaussian = Uses a Gaussian distribution with a mean of X and a standard deviation of Y
-    '''     BiasedStart = Uses the Biased Random number generator with a bias towards the start of the list
-    '''     BiasedMiddle = Uses the Biased Random number generator with a bias towards the middle of the list
-    '''     BiasedEnd = Uses the Biased Random number generator with a bias towards the end of the list
-    '''     NextEntry = Gets the next entry in the list, when it reaches the end, it starts again
-    '''     TrimGaussian = Uses a Gaussian distribution with a mean of X and a standard deviation of Y, then removes the result from the list
-    '''     TrimBiasedStart = Uses the Biased Random number generator with a bias towards the start of the list, then removes the result from the list
-    '''     TrimBiasedMiddle = Uses the Biased Random number generator with a bias towards the middle of the list, then removes the result from the list
-    '''     TrimBiasedEnd = Uses the Biased Random number generator with a bias towards the end of the list, then removes the result from the list
-    '''     Indx = Gets the entry at the specified index
+    '''     <list type="table">  
+    '''         <term> Int</term>  
+    '''           <description> Uses a normal Integer Random number between 0 and max entries</description>  
+    '''        <item>
+    '''         <term> Gaussian</term>  
+    '''           <description> Uses a Gaussian distribution with a mean of X and a standard deviation of Y</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> BiasedStart</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the start of the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> BiasedMiddle</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the middle of the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> BiasedEnd</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the end of the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> NextEntry</term>  
+    '''           <description> Gets the next entry in the list, when it reaches the end, it starts again</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> TrimGaussian</term>  
+    '''           <description> Uses a Gaussian distribution with a mean of X and a standard deviation of Y, then removes the result from the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> TrimBiasedStart</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the start of the list, then removes the result from the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> TrimBiasedMiddle</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the middle of the list, then removes the result from the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> TrimBiasedEnd</term>  
+    '''           <description> Uses the Biased Random number generator with a bias towards the end of the list, then removes the result from the list</description>  
+    '''        </item>
+    '''        <item>
+    '''         <term> Indx</term>  
+    '''           <description> Gets the entry at the specified index</description>  
+    '''        </item>
+    '''     </list>
     ''' </summary>
     Public Enum RandomType
         Int
@@ -54,8 +88,14 @@ Public Class KRndmGen
 
     ''' <summary>
     ''' Which list to target
-    '''     DefaultList = This is the list that is realoaded if using the "Reset" command
-    '''     EntryList = The working list that is used for the random selection
+    '''     <list type="table">  
+    '''         <term> DefaultList</term>  
+    '''           <description> This is the list that is realoaded if using the "Reset" command</description>  
+    '''        <item>
+    '''         <term> EntryList</term>  
+    '''           <description> The working list that is used for the random selection</description>  
+    '''        </item>
+    '''     </list>
     ''' </summary>
     Public Enum ListOpsTarget
         DefaultList
